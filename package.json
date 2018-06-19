@@ -1,0 +1,22 @@
+{
+  "name": "serverless-challenge",
+  "version": "1.0.0",
+  "description": "Build a serverless architecture for image analysis",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luishc/serverless-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luishc/serverless-challenge/issues"
+  },
+  "homepage": "https://github.com/luishc/serverless-challenge#readme",
+  "dependencies": {
+    "exif-parser": "^0.1.12"
+  }
+}

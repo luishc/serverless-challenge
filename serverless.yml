@@ -9,6 +9,7 @@ provider:
   region: us-east-1
   environment:
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+    BUCKET_NAME: serverless-challenge-storage
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -19,6 +20,12 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
+    - Effect: Allow
+      Action: "s3:*"
+      Resource: "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}/*"
+    - Effect: Allow
+      Action: "s3:*"
+      Resource: "arn:aws:s3:::${self:provider.environment.BUCKET_NAME}"
 
 functions:
   extractMetadata:
@@ -28,7 +35,7 @@ functions:
     timeout: 30
     events:
       - s3:
-          bucket: bucketname # Escolha o nome do seu bucket que deve ser único
+          bucket: ${self:provider.environment.BUCKET_NAME}
           event: s3:ObjectCreated:*
           rules:
             - prefix: uploads/
@@ -41,6 +48,16 @@ functions:
     events:
       - http:
           path: images/{s3objectkey}
+          method: get
+          cors: true
+  getImage:
+    handler: handler.getImage
+    description:
+    memorySize: 128
+    timeout: 30
+    events:
+      - http:
+          path: images/download/{s3objectkey}
           method: get
           cors: true
 
